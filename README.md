@@ -64,3 +64,37 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Setting up docker laravel project
+
+First download homebrew from https://brew.sh/, run the command given in the brew webpage and follow the instructions given by the terminal once the command is run
+
+## Downloading PHP
+
+Open a new terinal and run "brew install php"
+
+## Downloading Composer
+
+Download Composer from https://getcomposer.org/download/ follow the instructions on downloading composer and once that is done, run sudo mv composer.phar /usr/local/bin/composer in your terminal
+
+## Using Sail for the laravel project
+
+Run composer require laravel/sail in the laravel projects root directory
+
+## Set up the .env file
+
+In the laravel root directory run cp .env.example .env and set the third line "APP_KEY" to "base64:MOj2OZCEP9jFuzvPremPlXsSstsatqD0iaZxA2IinBE=" and the DB settings like so:
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=girav2
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+## Set up the vendor directory
+
+In your root laravel directory run composer install
+
+## And finally set up the docker containers 
+
+Running ./vendor/bin/sail up -d should run all the docker containers and images required for the laravel and opening localhost in your browser should open the laravel project
