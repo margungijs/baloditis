@@ -79,7 +79,20 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product updated successfully']);
     }
 
-    public function setCategory(Request $request, $productID){
+    public function destroy($id)
+    {
+        $product = StorageProduct::find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        $product->delete();
+
+        return response()->json(['message' => 'Product deleted successfully']);
+    }
+  
+      public function setCategory(Request $request, $productID){
         // Validate the request data if needed
         $request->validate([
             'category' => 'required|string|max:255',
