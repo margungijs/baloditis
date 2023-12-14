@@ -42,8 +42,7 @@ class UserController extends Controller
         try {
             $data = $request->validate([
                 'name' => 'required|string|max:50|min:3',
-                'role' => 'required|integer|in:0,1,2',
-                'password' => 'required|string|min:8'
+                'role' => 'required|integer|in:0,1,2'
             ]);
 
             $user = User::findOrFail($userID);

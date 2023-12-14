@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('storage_products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category');
+            $table->string('category')->default('');
             $table->string('description');
             $table->decimal('price', 8, 2); // Assuming a decimal field for the price
+            $table->integer('count')->default(1);
             $table->timestamps();
         });
     }

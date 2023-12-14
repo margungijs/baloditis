@@ -4,10 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\StorageProduct;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
+    public function groupedProducts()
+    {
+        $products = StorageProduct::all();
+
+        $groupedProducts = $products->groupBy(function ($item) {
+            return $item->category ?: 'Unsorted';
+        });
+
+        return response()->json($groupedProducts);
+    }
+
     public function getProducts()
     {
         $allData = StorageProduct::all();
@@ -16,17 +28,30 @@ class ProductController extends Controller
 
         return response()->json($allData);
     }
+
     public function store(Request $request)
     {
-        \Log::info('Received request data:', $request->all());
         try {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric'
-        ]);
+            // Validate the request data
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'category' => 'sometimes|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric',
+                'count' => 'sometimes|nullable|integer'
+            ]);
+
+            $existingProduct = StorageProduct::where('name', $validatedData['name'])->first();
+
+            if($existingProduct){
+                $count = $validatedData['count'] ?? false;
+                if($count){
+                    $existingProduct->increment('count', $count);
+                }else{
+                    $existingProduct->increment('count');
+                }
+                return response()->json(['message' => 'Product count incremented', 'product' => $existingProduct]);
+            }
 
             // Create a new product using Eloquent
             $product = StorageProduct::create($validatedData);
@@ -45,6 +70,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'Validation failed', 'messages' => $detailedErrors], 422);
         }
     }
+
     public function update(Request $request, $id)
     {
         $product = StorageProduct::findOrFail($id);
@@ -52,6 +78,7 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product updated successfully']);
     }
+
     public function destroy($id)
     {
         $product = StorageProduct::find($id);
@@ -63,5 +90,21 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json(['message' => 'Product deleted successfully']);
+    }
+  
+      public function setCategory(Request $request, $productID){
+        // Validate the request data if needed
+        $request->validate([
+            'category' => 'required|string|max:255',
+        ]);
+
+        // Find the product by ID
+        $product = StorageProduct::findOrFail($productID);
+
+        // Update the 'category' field with the new value
+        $product->update(['category' => $request->input('category')]);
+
+        // Optionally, you can return a response
+        return response()->json(['message' => 'Category updated successfully', 'product' => $product]);
     }
 }

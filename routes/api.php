@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,13 @@ Route::get('/getProducts', [ProductController::class, 'getProducts']);
 
 Route::put('/getProducts/{id}', [ProductController::class, 'update']);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']); 
+
+Route::get('/groupedProducts', [ProductController::class, 'groupedProducts']);
+
+Route::put('/updateCategory/{productID}', [ProductController::class, 'setCategory']);
+
+Route::get('/PDFAtskaite', [PdfController::class, 'generatePDF']);
 
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
