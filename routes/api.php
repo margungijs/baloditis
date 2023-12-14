@@ -37,4 +37,6 @@ Route::put('/getProducts/{id}', [ProductController::class, 'update']);
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
 
