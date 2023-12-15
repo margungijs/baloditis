@@ -44,4 +44,4 @@ Route::put('/updateCategory/{productID}', [ProductController::class, 'setCategor
 
 Route::get('/PDFAtskaite', [PdfController::class, 'generatePDF']);
 
-
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);

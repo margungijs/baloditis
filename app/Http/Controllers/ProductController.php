@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\StorageProduct;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use App\Services\LoggerService;
 
 class ProductController extends Controller
 {
@@ -56,6 +57,7 @@ class ProductController extends Controller
             // Create a new product using Eloquent
             $product = StorageProduct::create($validatedData);
 
+
             // Optionally, you can redirect or return a response
             return response()->json(['message' => 'Product created', 'product' => $product], 201);
         }catch (ValidationException $e) {
@@ -77,6 +79,19 @@ class ProductController extends Controller
         $product->update($request->all());
 
         return response()->json(['message' => 'Product updated successfully']);
+    }
+
+    public function destroy($id)
+    {
+        $product = StorageProduct::find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        $product->delete();
+
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 
     public function setCategory(Request $request, $productID){
