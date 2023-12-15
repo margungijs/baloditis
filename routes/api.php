@@ -36,7 +36,7 @@ Route::get('/getProducts', [ProductController::class, 'getProducts']);
 
 Route::put('/getProducts/{id}', [ProductController::class, 'update']);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']); 
 
 Route::get('/groupedProducts', [ProductController::class, 'groupedProducts']);
 
