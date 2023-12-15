@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\StorageProduct;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use App\Services\LoggerService;
 
 class ProductController extends Controller
 {
@@ -55,6 +56,7 @@ class ProductController extends Controller
 
             // Create a new product using Eloquent
             $product = StorageProduct::create($validatedData);
+
 
             // Optionally, you can redirect or return a response
             return response()->json(['message' => 'Product created', 'product' => $product], 201);
